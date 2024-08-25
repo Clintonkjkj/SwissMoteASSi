@@ -32,9 +32,8 @@ function App() {
         const provider = new ethers.BrowserProvider(ethereum);
         setProvider(provider);
 
-        const accounts = await ethereum.request({
-          method: "eth_requestAccounts",
-        });
+        await ethereum.request({ method: "eth_requestAccounts" });
+        const accounts = await provider.listAccounts();
         setAccount(accounts[0]);
 
         const signer = await provider.getSigner();
@@ -92,9 +91,8 @@ function App() {
         return;
       }
 
-      const accounts = await ethereum.request({
-        method: "eth_requestAccounts",
-      });
+      await ethereum.request({ method: "eth_requestAccounts" });
+      const accounts = await provider.listAccounts();
       setAccount(accounts[0]);
 
       const provider = new ethers.BrowserProvider(ethereum);

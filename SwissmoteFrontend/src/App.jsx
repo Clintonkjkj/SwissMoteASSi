@@ -91,12 +91,13 @@ function App() {
         return;
       }
 
+      // Instantiate the provider first
+      const provider = new ethers.BrowserProvider(ethereum);
+      setProvider(provider);
+
       await ethereum.request({ method: "eth_requestAccounts" });
       const accounts = await provider.listAccounts();
       setAccount(accounts[0]);
-
-      const provider = new ethers.BrowserProvider(ethereum);
-      setProvider(provider);
 
       const signer = await provider.getSigner();
       setSigner(signer);
@@ -104,6 +105,8 @@ function App() {
       const balanceEther = await provider.getBalance(accounts[0]);
       const balanceFinal = ethers.formatEther(balanceEther);
       setBalance(parseFloat(balanceFinal).toFixed(3));
+
+      // Refresh the page after successful connection
       window.location.reload();
     } catch (error) {
       console.error("Error connecting wallet:", error);

@@ -32,7 +32,9 @@ function App() {
         const provider = new ethers.BrowserProvider(ethereum);
         setProvider(provider);
 
-        const accounts = await ethereum.request({ method: "eth_requestAccounts" });
+        const accounts = await ethereum.request({
+          method: "eth_requestAccounts",
+        });
         setAccount(accounts[0]);
 
         const signer = provider.getSigner();
@@ -83,11 +85,16 @@ function App() {
       const { ethereum } = window;
 
       if (!ethereum) {
-        snackMsg("MetaMask is not installed. Please install it to use this app.", 10000);
+        snackMsg(
+          "MetaMask is not installed. Please install it to use this app.",
+          10000
+        );
         return;
       }
 
-      const accounts = await ethereum.request({ method: "eth_requestAccounts" });
+      const accounts = await ethereum.request({
+        method: "eth_requestAccounts",
+      });
       setAccount(accounts[0]);
 
       const provider = new ethers.BrowserProvider(ethereum);
@@ -270,4 +277,32 @@ function App() {
         </div>
       ) : (
         <div className="dashboard_connect">
-          <h4 className="please
+          <h4 className="pleaseConnect">
+            Wallet not connected Please click the Connect wallet button to send
+            the request and approve the request on wallet
+          </h4>
+          <button
+            className="connect"
+            onClick={() =>
+              window.ethereum.request({ method: "eth_requestAccounts" })
+            }
+          >
+            {account ? "Wallet Connected" : "Connect Wallet"}
+          </button>
+        </div>
+      )}
+      <div className="note">
+        <h6 className="noteHeader" style={{}}>
+          Note
+        </h6>
+        <p className="notepara">
+          In the event of insufficient balance in the contract, please try with
+          a minimum amount. If the transaction fails, consider selecting the
+          other side of the coin and attempt the transaction again.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+export default App;

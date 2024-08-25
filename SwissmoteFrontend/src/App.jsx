@@ -64,7 +64,6 @@ function App() {
             setLatestEvent(event);
           }
         );
-        window.location.reload();
       } else {
         snackMsg("Please install MetaMask to use this app.", 10000);
       }

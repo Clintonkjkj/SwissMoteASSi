@@ -103,6 +103,10 @@ function App() {
         });
 
         await tx.wait();
+        const updatedBalance = await provider.getBalance(account);
+        const updatedBalanceEther = ethers.formatEther(updatedBalance);
+        setBalance(parseFloat(updatedBalanceEther).toFixed(3));
+
         setResult(true);
         setTimeout(() => {
           setResult(false);

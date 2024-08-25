@@ -1,0 +1,33 @@
+/* Snackbar.css */
+.snackbar {
+  visibility: hidden;
+  min-width: 250px;
+  margin-left: -125px;
+  background-color: #bc2e2e;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  padding: 16px;
+  position: fixed;
+  z-index: 1;
+  left: 45%;
+  bottom: 30px;
+  font-size: 17px;
+  transition: visibility 0.5s, opacity 0.5s linear;
+  opacity: 0;
+  border-radius: 5px 5px;
+}
+
+.snackbar.show {
+  visibility: visible;
+  opacity: 1;
+}
+
+.close-snackbar {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 13px;
+  margin-left: 20px;
+  cursor: pointer;
+}

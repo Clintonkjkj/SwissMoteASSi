@@ -37,7 +37,7 @@ function App() {
         });
         setAccount(accounts[0]);
 
-        const signer = provider.getSigner();
+        const signer = await provider.getSigner();
         setSigner(signer);
 
         const contractInstance = new ethers.Contract(
@@ -100,7 +100,7 @@ function App() {
       const provider = new ethers.BrowserProvider(ethereum);
       setProvider(provider);
 
-      const signer = provider.getSigner();
+      const signer = await provider.getSigner();
       setSigner(signer);
 
       const balanceEther = await provider.getBalance(accounts[0]);

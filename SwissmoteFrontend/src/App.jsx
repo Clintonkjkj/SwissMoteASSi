@@ -64,6 +64,7 @@ function App() {
             setLatestEvent(event);
           }
         );
+        window.location.reload();
       } else {
         snackMsg("Please install MetaMask to use this app.", 10000);
       }
@@ -104,6 +105,7 @@ function App() {
       const balanceEther = await provider.getBalance(accounts[0]);
       const balanceFinal = ethers.formatEther(balanceEther);
       setBalance(parseFloat(balanceFinal).toFixed(3));
+      window.location.reload();
     } catch (error) {
       console.error("Error connecting wallet:", error);
       snackMsg("Failed to connect wallet. Please try again.", 10000);

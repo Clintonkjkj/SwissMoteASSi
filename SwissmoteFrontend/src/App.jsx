@@ -91,7 +91,6 @@ function App() {
         return;
       }
 
-      // Instantiate the provider first
       const provider = new ethers.BrowserProvider(ethereum);
       setProvider(provider);
 

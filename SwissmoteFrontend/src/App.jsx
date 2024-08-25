@@ -23,6 +23,7 @@ function App() {
   const [result, setResult] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+
   useEffect(() => {
     const initialize = async () => {
       const { ethereum } = window;
@@ -31,11 +32,10 @@ function App() {
         const provider = new ethers.BrowserProvider(ethereum);
         setProvider(provider);
 
-        await ethereum.request({ method: "eth_requestAccounts" });
-        const accounts = await provider.listAccounts();
+        const accounts = await ethereum.request({ method: "eth_requestAccounts" });
         setAccount(accounts[0]);
 
-        const signer = await provider.getSigner();
+        const signer = provider.getSigner();
         setSigner(signer);
 
         const contractInstance = new ethers.Contract(
@@ -77,9 +77,38 @@ function App() {
       }
     };
   }, [contract]);
+
+  const connectWallet = async () => {
+    try {
+      const { ethereum } = window;
+
+      if (!ethereum) {
+        snackMsg("MetaMask is not installed. Please install it to use this app.", 10000);
+        return;
+      }
+
+      const accounts = await ethereum.request({ method: "eth_requestAccounts" });
+      setAccount(accounts[0]);
+
+      const provider = new ethers.BrowserProvider(ethereum);
+      setProvider(provider);
+
+      const signer = provider.getSigner();
+      setSigner(signer);
+
+      const balanceEther = await provider.getBalance(accounts[0]);
+      const balanceFinal = ethers.formatEther(balanceEther);
+      setBalance(parseFloat(balanceFinal).toFixed(3));
+    } catch (error) {
+      console.error("Error connecting wallet:", error);
+      snackMsg("Failed to connect wallet. Please try again.", 10000);
+    }
+  };
+
   const handleCloseSnackbar = () => {
     setShowSnackbar(false); // Hide the snackbar
   };
+
   const snackMsg = (msg, time) => {
     setSnackbarMessage(msg);
     setShowSnackbar(true);
@@ -88,6 +117,7 @@ function App() {
       setShowSnackbar(false);
     }, time);
   };
+
   const flipCoin = async () => {
     if (amount < 0.001) {
       snackMsg("Please enter Amount greater than 0.001", 10000);
@@ -115,7 +145,7 @@ function App() {
       } catch (error) {
         setFlipped(false);
 
-        snackMsg(`Transaction failed:${error.reason}`, 4000);
+        snackMsg(`Transaction failed: ${error.reason}`, 4000);
       }
     } else {
       setFlipped(false);
@@ -134,22 +164,17 @@ function App() {
       )}
       <div className="header">
         <div>
-          <img src="/etherium_logo.jpeg" />
+          <img src="/etherium_logo.jpeg" alt="Ethereum Logo" />
           <div className="heading">Welcome to Coinflip Game</div>
         </div>
-        <button
-          className="connect"
-          onClick={() =>
-            window.ethereum.request({ method: "eth_requestAccounts" })
-          }
-        >
+        <button className="connect" onClick={connectWallet}>
           {account ? "Wallet Connected" : "Connect Wallet"}
         </button>
       </div>
       {account ? (
         <div className="dashboard">
           <div className="Balance">
-            <img src="/ethereum-gif-58.jpg" />
+            <img src="/ethereum-gif-58.jpg" alt="Ethereum GIF" />
             <div>Balance: {balance} ETH</div>
           </div>
           {flipped ? (
@@ -158,19 +183,17 @@ function App() {
                 {latestEvent &&
                   (latestEvent.win ? (
                     <div className="flipper">
-                      {" "}
-                      <img src="/win.jpg" />
+                      <img src="/win.jpg" alt="You Won" />
                     </div>
                   ) : (
                     <div className="flipper">
-                      {" "}
-                      <img src="/lose.jpg" />
+                      <img src="/lose.jpg" alt="You Lost" />
                     </div>
                   ))}
               </div>
             ) : (
               <div className="flipper">
-                <img src="/flipper.gif" />
+                <img src="/flipper.gif" alt="Flipping Coin" />
                 <div>
                   <p>
                     Please wait while your transaction is being processed.
@@ -247,32 +270,4 @@ function App() {
         </div>
       ) : (
         <div className="dashboard_connect">
-          <h4 className="pleaseConnect">
-            Wallet not connected Please click the Connect wallet button to send
-            the request and approve the request on wallet
-          </h4>
-          <button
-            className="connect"
-            onClick={() =>
-              window.ethereum.request({ method: "eth_requestAccounts" })
-            }
-          >
-            {account ? "Wallet Connected" : "Connect Wallet"}
-          </button>
-        </div>
-      )}
-      <div className="note">
-        <h6 className="noteHeader" style={{}}>
-          Note
-        </h6>
-        <p className="notepara">
-          In the event of insufficient balance in the contract, please try with
-          a minimum amount. If the transaction fails, consider selecting the
-          other side of the coin and attempt the transaction again.
-        </p>
-      </div>
-    </div>
-  );
-}
-
-export default App;
+          <h4 className="please
